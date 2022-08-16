@@ -1,6 +1,6 @@
 {
   "name": "merge-junit-suites",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool to merge junit test files",
   "private": false,
   "main": "merge-files.js",

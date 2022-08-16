@@ -4,7 +4,7 @@ import {program} from 'commander';
 import path from 'path';
 import fs from 'fs';
 import { XMLParser, XMLBuilder } from 'fast-xml-parser'
-import { Testcase, TestSuite, TestSuites } from './model';
+import { MergeOptions, Options, Testcase, TestSuite, TestSuites } from './model';
 
 const parser = new XMLParser({
   parseAttributeValue: true,
@@ -20,9 +20,26 @@ const builder = new XMLBuilder({
 
 
 
+program
+  .command('verify')
+  .description('Verify testsuites (find duplicates)')
+  .action(verify);
+const mergeCmd = program
+  .command('merge')
+  .description('Merge multiple test suites')
+  .option('-n, --name <suitename>', 'Name of root test suite (added to <testsuites name="..">).', 'junit tests')
+  .option('-o, --output <path>', 'Path to output files to. If omitted, prints to stdout')
+  .action(merge);
+
+program
+  .requiredOption('-p, --path <value>', 'Path containing xml files')
+
+program.parse();
+
 async function merge() {
-  const options = program.opts();
-  const suites = parseAndGetSuites();
+  const options = program.opts() as Options;
+  const mergeOptions = mergeCmd.opts() as MergeOptions;
+  const suites = parseAndGetSuites(options);
   const sums = suites.reduce(
     (a, b) => {
       return {
@@ -38,7 +55,7 @@ async function merge() {
       _failures: 0,
       _errors: 0,
       _time: 0,
-      _name: options.name,
+      _name: mergeOptions.name,
     }
   );
   const flatSuites = suites
@@ -58,19 +75,20 @@ async function merge() {
   xml = `<?xml version='1.0' encoding='utf-8'?>
   ${xml}`;
   
-  if (options.output) {
-    let output = path.resolve(options.output);
+  if (mergeOptions.output) {
+    let output = path.resolve(mergeOptions.output);
     if (!output.endsWith('.xml')) {
       output = path.join(output, 'merge-junit.xml')
     }
     fs.writeFileSync(output, xml);
   } else {
-    process.stdout.write(xml);
+    // process.stdout.write(xml);
   }
 }
 
 async function verify() {
-  const suites = parseAndGetSuites();
+  const options = program.opts() as Options;
+  const suites = parseAndGetSuites(options);
   function getCases(s: TestSuite | Array<TestSuite>): Array<Testcase> {
     if (s instanceof Array) {
       return s
@@ -97,8 +115,7 @@ async function verify() {
   }
 }
 
-function parseAndGetSuites() {
-  const options = program.opts();
+function parseAndGetSuites(options: Options) {
   const filePath = path.resolve(options.path);
 
   let xmlFiles: Array<string> = fs.readdirSync(filePath)
@@ -115,20 +132,3 @@ function parseAndGetSuites() {
   return xmlFiles.map((x) => getSuites(x));
 }
 
-
-
-program
-  .command('verify')
-  .description('Verify testsuites (find duplicates)')
-  .action(verify);
-program
-  .command('merge')
-  .description('Merge multiple test suites')
-  .option('-n, --name <suitename>', 'Name of root test suite (added to <testsuites name="..">).', 'junit tests')
-  .option('-o, --output <path>', 'Path to output files to. If omitted, prints to stdout')
-  .action(merge);
-
-program
-  .requiredOption('-p, --path <value>', 'Path containing xml files')
-
-program.parse();
