@@ -1,0 +1,36 @@
+{
+  "name": "merge-junit",
+  "version": "1.0.0",
+  "description": "Tool to merge junit test files",
+  "private": false,
+  "main": "merge-files.js",
+  "bin": "merge-files.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p tsconfig.json",
+    "start": "nodemon merge-files.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusijs/merge-junit"
+  },
+  "keywords": [
+    "junit"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yusijs/merge-junit/issues"
+  },
+  "homepage": "https://github.com/yusijs/merge-junit#readme",
+  "dependencies": {
+    "fast-xml-parser": "^4.0.9",
+    "commander": "^9.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.5",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  }
+}
