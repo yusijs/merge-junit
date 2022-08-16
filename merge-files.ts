@@ -82,7 +82,7 @@ async function merge() {
     }
     fs.writeFileSync(output, xml);
   } else {
-    // process.stdout.write(xml);
+    process.stdout.write(xml);
   }
 }
 
