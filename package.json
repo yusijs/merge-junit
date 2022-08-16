@@ -1,5 +1,5 @@
 {
-  "name": "merge-junit",
+  "name": "merge-junit-suites",
   "version": "1.0.0",
   "description": "Tool to merge junit test files",
   "private": false,

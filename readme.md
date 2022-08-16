@@ -5,14 +5,14 @@ Inspired by [weiwei/junitparser](https://github.com/weiwei/junitparser)
 ### Installation
 Install the package globally:
 
-`npm install -g merge-junit`
+`npm install -g merge-junit-suites`
 
 
 ### Usage
 
 ```
-merge-junit --help
-Usage: merge-junit [options] [command]
+merge-junit-suites --help
+Usage: merge-junit-suites [options] [command]
 
 Options:
   -p, --path <value>  Path containing xml files
@@ -23,8 +23,8 @@ Commands:
   merge [options]     Merge multiple test suites
   help [command]      display help for command
 
-merge-junit merge --help
-Usage: merge-junit merge [options]
+merge-junit-suites merge --help
+Usage: merge-junit-suites merge [options]
 
 Merge multiple test suites
 
@@ -39,12 +39,12 @@ Options:
 
 #### Verify
 ```sh
-merge-junit verify --path /path/to/xml-dir
+merge-junit-suites verify --path /path/to/xml-dir
 ```
 Returns a count of duplicate testcase names + list of name&classname
 
 #### Merge
 ```
-merge-junit merge --path /path/to/xml-dir --name "My Test Suite" --output /path/to/output
+merge-junit-suites merge --path /path/to/xml-dir --name "My Test Suite" --output /path/to/output
 ```
 Will combine all testsuites in /path/to/xml-dir (all .xml files), add name="My test suite" to \<testsuites\> and output to /path/to/output/junit-merged.xml
