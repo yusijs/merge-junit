@@ -123,12 +123,20 @@ function parseAndGetSuites(options: Options) {
     .map(file => path.join(filePath, file))
     .map(file => fs.readFileSync(file, 'utf-8'))
   
-  const getSuites = (xml: string): TestSuites => {
+  const getSuites = (xml: string): TestSuites | null => {
     const obj = parser.parse(xml);
-    const suites = obj.testsuites;
+    let suites: TestSuites | null = null;
+    if (obj.testsuites) {
+      suites = obj.testsuites;
+    } else if (obj.testsuite) {
+      suites = {
+        ...obj.testsuite,
+        testsuite: obj.testsuite
+      }
+    }
     return suites;
   };
   
-  return xmlFiles.map((x) => getSuites(x));
+  return xmlFiles.map((x) => getSuites(x)).filter(s => !!s) as Array<TestSuites>;
 }
 
